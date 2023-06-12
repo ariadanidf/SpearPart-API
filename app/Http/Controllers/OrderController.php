@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
+    //bikin order
     public function ordering(Request $request)
 {
     try {
@@ -54,7 +57,43 @@ class OrderController extends Controller
             'message' => 'Kesalahan Server Internal'
         ]);
     }
+
 }
+
+    //update order
+    public function updateOrder(Request $request)
+    {
+        $response = Http::get('http://127.0.0.1:8001/api/pesanan/data_pesanan');
+        $responseData = $response->json();
+    
+        if ($response->status() === 200) {
+            $savedData = [];
+    
+            foreach ($responseData['data'] as $item) {
+                // Periksa apakah id_order sudah ada di database
+                $existingData = Order::where('id_order', $item['id_order'])->first();
+    
+                if ($existingData) {
+                    // Jika id_order ada, lakukan pembaruan harga_ongkir
+                    $existingData->harga_ongkir = $item['harga_ongkir'];
+                    $existingData->save();
+                    $savedData[] = $existingData;
+                }
+            }
+    
+            return response()->json([
+                'code' => 200,
+                'message' => 'Sukses',
+                'data' => $savedData
+            ]);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'message' => 'Gagal'
+            ]);
+        }
+    }
+    
     
     
     public function index()
