@@ -24,9 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('pemesanan', [OrderController::class,'index']);
 
-Route::post('pemesanan/ordering', [OrderController::class,'ordering']);
+Route::post('pemesanan', [OrderController::class,'ordering']);
 
-Route::get('pemesanan/updateOrder', [OrderController::class,'updateOrder']);
+Route::get('updateOrder', [OrderController::class,'updateOrder']);
 
 Route::get('pemesanan/{id}', [OrderController::class,'show']);
 
