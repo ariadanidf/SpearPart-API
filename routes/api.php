@@ -36,8 +36,8 @@ Route::get('lacak/{id_order}', [OrderController::class,'lacak']);
 //stock
 Route::get('stok/show/', [StockController::class, 'index']);
 
-Route::get('stok/show/{id}', [StockController::class, 'show']);
+Route::get('stok/show/{kode_barang}', [StockController::class, 'show']);
 
 Route::get('cekStok/{kode_barang}', [StockController::class, 'cekStok']);
 
-Route::put('cekstok/barang/{kode_barang}', [StockController::class, 'update']);
+Route::post('cekstok/barang/{kode_barang}', [StockController::class, 'update']);

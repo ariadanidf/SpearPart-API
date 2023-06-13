@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_barang');
             $table->string('stok');
             $table->string('quality');
+            $table->timestamps();
         });
     }
 
