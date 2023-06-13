@@ -43,19 +43,19 @@ class OrderController extends Controller
                 
                 return response()->json([
                     'code' => 200,
-                    'message' => 'Sukses',
+                    'message' => 'Success',
                     'data' => $orderData
                 ]);
             } else {
                 return response()->json([
                     'code' => 404,
-                    'message' => 'Kesalahan Server Internal'
+                    'message' => 'Not Found'
                 ]);
             }
         } catch (Exception $error) {
             return response()->json([
                 'code' => 500,
-                'message' => 'Kesalahan Server Internal: ' . $error->getMessage()
+                'message' => 'Internal Server Error: ' . $error->getMessage()
             ]);
         }
     }
@@ -83,13 +83,13 @@ class OrderController extends Controller
     
             return response()->json([
                 'code' => 200,
-                'message' => 'Sukses',
+                'message' => 'Success',
                 'data' => $savedData
             ]);
         } else {
             return response()->json([
                 'code' => 400,
-                'message' => 'Gagal'
+                'message' => 'Bad Request'
             ]);
         }
     }

@@ -9,6 +9,7 @@ class Stock extends Model
 {
     use HasFactory;
     protected $table = 'stocks';
+    protected $primaryKey = 'kode_barang';
     protected $fillable = [
         'kode_barang',
         'nama_barang',

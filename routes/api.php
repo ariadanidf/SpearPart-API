@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+//order
 Route::get('pemesanan', [OrderController::class,'index']);
 
 Route::post('pemesanan', [OrderController::class,'ordering']);
@@ -30,4 +31,10 @@ Route::get('updateOrder', [OrderController::class,'updateOrder']);
 
 Route::get('pemesanan/{id}', [OrderController::class,'show']);
 
+//price
 Route::get('/price/{id_produk}/{qty}/{id_customer}', [PriceController::class, 'checkPrice']);
+
+//stock
+Route::get('cekstok/show/{id}', [StockController::class, 'show']);
+
+Route::put('cekstok/barang/{kode_barang}', [StockController::class, 'update']);
