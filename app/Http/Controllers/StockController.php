@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
+    //daniel
     public function show($id)
     {
         $data = Stock::where('kode_barang', '=', $id)->get();
@@ -19,6 +20,7 @@ class StockController extends Controller
         }
     }
 
+    //agung
     public function update(Request $request, $kode_barang)
     {
         try {
