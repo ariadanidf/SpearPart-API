@@ -170,19 +170,6 @@ class OrderController extends Controller
     }
      
     
-
-    public function data_pesanan()
-    {
-        $pesanan = Pesanan::all();
-
-        if ($pesanan) {
-            return ApiFormatter::createApi(200, 'Permintaan berhasil, data pesanan berhasil ditampilkan', $pesanan);
-        } else {
-            return ApiFormatter::createApi(400, 'Permintaan gagal, data pesanan tidak ditampilkan');
-        }
-        
-    }
-    
     public function index()
     {
         $order = Order::all();
