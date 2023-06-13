@@ -31,6 +31,7 @@ Route::get('updateOrder', [OrderController::class,'updateOrder']);
 
 Route::get('pemesanan/{id}', [OrderController::class,'show']);
 
+Route::get('lacak/{id_order}', [OrderController::class,'lacak']);
 //price
 Route::get('/price/{id_produk}/{qty}/{id_customer}', [PriceController::class, 'checkPrice']);
 

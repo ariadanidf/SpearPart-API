@@ -23,13 +23,10 @@ class Order extends Model
 
     ];
 
-    // Nama tabel yang digunakan oleh model
     protected $table = 'orders';
 
-    // Kolom yang dianggap sebagai kunci utama (secara default, Eloquent mengasumsikan kolom 'id' sebagai kunci utama)
     protected $primaryKey = 'id_order';
 
-    // Menyatakan bahwa kunci utama adalah inkremen
     public $incrementing = true;
 
 }

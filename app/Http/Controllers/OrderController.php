@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Track;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -38,8 +39,7 @@ class OrderController extends Controller
     
             if ($order) {
                 $orderData = $order->toArray();
-                $orderData['id_order'] = isset($orderData['id']) ? $orderData['id'] : null;
-                unset($orderData['id']);
+                $orderData['id_order'] = $orderData['id_order'];
                 
                 return response()->json([
                     'code' => 200,
@@ -60,7 +60,7 @@ class OrderController extends Controller
         }
     }
 
-    //update order
+    //update harga -> sonia
     public function updateOrder(Request $request)
     {
         $response = Http::get('http://127.0.0.1:8001/api/pesanan/data_pesanan');
@@ -76,11 +76,30 @@ class OrderController extends Controller
                 if ($existingData) {
                     // Jika id_order ada, lakukan pembaruan harga_ongkir
                     $existingData->harga_ongkir = $item['harga_ongkir'];
+                    $existingData->total_harga = $existingData->harga_barang + $existingData->harga_ongkir;
                     $existingData->save();
                     $savedData[] = $existingData;
                 }
             }
+
+            $response = Http::get('http://127.0.0.1:8001/api/pengiriman/data_pengiriman');
+            $responseData = $response->json();
+        
+        if ($response->status() === 200) {
+            $savedData = [];
     
+            foreach ($responseData['data'] as $item) {
+                // Periksa apakah id_order sudah ada di database
+                $existingData = Order::where('id_order', $item['id_order'])->first();
+    
+                if ($existingData) {
+                    // Jika id_order ada, lakukan pembaruan harga_ongkir
+                    $existingData->no_resi = $item['no_resi'];
+                    $existingData->save();
+                    $savedData[] = $existingData;
+                }
+            }
+
             return response()->json([
                 'code' => 200,
                 'message' => 'Success',
@@ -93,8 +112,76 @@ class OrderController extends Controller
             ]);
         }
     }
+}
+    //lacak -> dani
+    public function lacak(Request $request, $id_order)
+    {
+        $response = Http::get('http://127.0.0.1:8001/api/pengiriman/lacakOrder/'. $id_order);
+        $responseData = json_decode($response->body());
     
+        if ($response->status() === 200) {
+            if (!empty($responseData->data)) {
+                $savedData = [];
+                foreach ($responseData->data as $item) {
+                    // Periksa apakah id_order sudah ada di database
+                    $existingData = Track::where('id_order', $item->id_order)->first();
+                    
+                    if (!$existingData) {
+                        // Jika id_order tidak ada, simpan ke database
+                        $data = Track::create([
+                        'id_order' => $item->id_order, 
+                        'no_resi' => $item->no_resi,
+                        'estimasi_waktu' => $item->estimasi_waktu,
+                        'status' => $item->status,
+                        'lokasi' => $item->lokasi,
+                        'konfirmasi_pengiriman' => $item->konfirmasi_pengiriman
+                        ]);
+                        $savedData[] = $data;
+                    
+                        return response()->json([
+                        'code' => 200,
+                        'message' => 'Success',
+                        'data' => $savedData
+                    ]);
+                    }
+                    else {
+                        $savedData = Track::select('no_resi',
+                        'id_order',
+                        'estimasi_waktu',
+                        'status',
+                        'lokasi',
+                        'konfirmasi_pengiriman')->get();
+                        return response()->json([
+                            'code' => 200,
+                            'message' => 'Success',
+                            'data' => $savedData
+                        ]);
+                    }
+                } 
+            } 
+            
+            else {
+                return response()->json([
+                    'code' => 400,
+                    'message' => 'Bad Request'
+                ]);
+            }
+        }
+    }
+     
     
+
+    public function data_pesanan()
+    {
+        $pesanan = Pesanan::all();
+
+        if ($pesanan) {
+            return ApiFormatter::createApi(200, 'Permintaan berhasil, data pesanan berhasil ditampilkan', $pesanan);
+        } else {
+            return ApiFormatter::createApi(400, 'Permintaan gagal, data pesanan tidak ditampilkan');
+        }
+        
+    }
     
     public function index()
     {
