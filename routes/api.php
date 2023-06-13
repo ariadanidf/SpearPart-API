@@ -29,7 +29,7 @@ Route::post('pemesanan', [OrderController::class,'ordering']);
 
 Route::get('updateOrder', [OrderController::class,'updateOrder']);
 
-Route::get('pemesanan/{id}', [OrderController::class,'show']);
+Route::get('pemesanan/{id_order}', [OrderController::class,'show']);
 
 Route::get('lacak/{id_order}', [OrderController::class,'lacak']);
 

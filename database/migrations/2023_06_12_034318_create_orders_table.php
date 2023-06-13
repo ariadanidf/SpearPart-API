@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id_order');
             $table->integer('id_customer');
-            $table->unsignedBigInteger('kode_barang');
-            $table->foreign('kode_barang')->references('kode_barang')->on('stocks');
+            $table->unsignedBigInteger('kode_barang')-> nullable() -> default(null);
+            $table->foreign('kode_barang')->references('kode_barang')->on('stocks') ;
             $table->string('nama_barang');
             $table->string('alamat_penerima');
             $table->date('order_date');

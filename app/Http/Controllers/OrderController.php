@@ -201,9 +201,9 @@ class OrderController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($id_order)
     {
-        $order = Order::find($id);
+        $order = Order::find($id_order);
         if($order){
         return response()->json([
             'code' => "200",
