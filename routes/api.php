@@ -38,6 +38,6 @@ Route::get('stok/show/', [StockController::class, 'index']);
 
 Route::get('stok/show/{kode_barang}', [StockController::class, 'show']);
 
-Route::get('cekStok/{kode_barang}', [StockController::class, 'cekStok']);
+Route::get('cekStok', [StockController::class, 'cekStok']);
 
 Route::post('cekstok/barang/{kode_barang}', [StockController::class, 'update']);

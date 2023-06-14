@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use App\Helpers\ApiFormatter;
 
 class StockController extends Controller
@@ -39,56 +41,35 @@ class StockController extends Controller
         }
     }
     
-    public function cekStok(Request $request, $kode_barang)
-    {
-        $response = Http::get('http://127.0.0.1:8001/api/--API IVAN--'. $kode_barang);
-        $responseData = json_decode($response->body());
-    
-        if ($response->status() === 200) {
-            if (!empty($responseData->data)) {
-                $savedData = [];
-                foreach ($responseData->data as $item) {
-                    // Periksa apakah id_order sudah ada di database
-                    $existingData = Track::where('kode_barang', $item->kode_barang)->first();
-                    
-                    if (!$existingData) {
-                        // Jika id_order tidak ada, simpan ke database
-                        $data = Track::create([
-                        'kode_barang' => $item->kode_barang, 
-                        'nama_barang' => $item->nama_barang,
-                        'stok' => $item->stok,
-                        'quality' => $item->quality
-                        ]);
-                        $savedData[] = $data;
-                    
-                        return response()->json([
-                        'code' => 200,
-                        'message' => 'Success',
-                        'data' => $savedData
-                    ]);
-                    }
-                    else {
-                        $savedData = Stock::select('kode_barang',
-                        'nama_barang',
-                        'stok',
-                        'quality',)->get();
-                        return response()->json([
-                            'code' => 200,
-                            'message' => 'Success',
-                            'data' => $savedData
-                        ]);
-                    }
-                } 
-            } 
-            
-            else {
-                return response()->json([
-                    'code' => 400,
-                    'message' => 'Bad Request'
-                ]);
-            }
-        }
-    }
+    public function cekStok(Request $request)
+     {
+         $response = Http::get('http://127.0.0.1:8002/api/stok');
+         $responseData = json_decode($response->body());
+     
+         if ($response->status() === 200) {
+             if (!empty($responseData->data)) {
+                 $savedData = [];
+                 foreach ($responseData->data as $item) {
+                     $existingData = Stock::where('kode_barang', $item->kode_barang)->first();
+                     if (!$existingData) {
+                         $data = Stock::create([
+                            'kode_barang' => $item->kode_barang, 
+                            'nama_barang' => $item->nama_barang,
+                            'stok' => $item->stok,
+                            'quality' => $item->quality
+                            ]);
+                         $savedData[] = $data;
+                     }
+                 }
+     
+                 return ApiFormatter::createApi(200, 'Success', $responseData);
+             } else {
+                 return ApiFormatter::createApi(400, 'Bad Request');
+             }
+         } else {
+             return ApiFormatter::createApi(400, 'Bad Request');
+         }
+     }
 
     //agung
     public function update(Request $request, $kode_barang)

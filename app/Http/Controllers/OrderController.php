@@ -70,11 +70,9 @@ class OrderController extends Controller
             $savedData = [];
     
             foreach ($responseData['data'] as $item) {
-                // Periksa apakah id_order sudah ada di database
                 $existingData = Order::where('id_order', $item['id_order'])->first();
     
                 if ($existingData) {
-                    // Jika id_order ada, lakukan pembaruan harga_ongkir
                     $existingData->harga_ongkir = $item['harga_ongkir'];
                     $existingData->total_harga = $existingData->harga_barang + $existingData->harga_ongkir;
                     $existingData->save();
@@ -89,11 +87,9 @@ class OrderController extends Controller
             $savedData = [];
     
             foreach ($responseData['data'] as $item) {
-                // Periksa apakah id_order sudah ada di database
                 $existingData = Order::where('id_order', $item['id_order'])->first();
     
                 if ($existingData) {
-                    // Jika id_order ada, lakukan pembaruan harga_ongkir
                     $existingData->no_resi = $item['no_resi'];
                     $existingData->save();
                     $savedData[] = $existingData;
@@ -123,11 +119,9 @@ class OrderController extends Controller
             if (!empty($responseData->data)) {
                 $savedData = [];
                 foreach ($responseData->data as $item) {
-                    // Periksa apakah id_order sudah ada di database
                     $existingData = Track::where('id_order', $item->id_order)->first();
                     
                     if (!$existingData) {
-                        // Jika id_order tidak ada, simpan ke database
                         $data = Track::create([
                         'id_order' => $item->id_order, 
                         'no_resi' => $item->no_resi,
