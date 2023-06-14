@@ -94,37 +94,4 @@ class StockController extends Controller
             return ApiFormatter::createApi(500, 'Internal Server Error: ' . $e->getMessage());
         }    
         }
-
-    // public function updatestok(Request $request, $id)
-    // {
-    //     try {
-    //         $request->validate([
-    //             'kode_barang' => 'required',
-    //             'nama_barang' => 'required',
-    //             'stok' => 'required',
-    //             'quality' => 'required',
-    //         ]);
-
-
-    //         $cekstok = Stock::findOrFail($id);
-
-    //         $logistik->update([
-    //             'kode_barang' => $request->kode_barang,
-    //             'nama_barang' => $request->nama_barang,
-    //             'stok' => $request->stok,
-    //             'quality' => $request->quality,
-    //         ]);
-
-    //         $data = cekstok::where('kode_barang', '=', $cekstok->id)->get();
-
-    //         if ($data) {
-    //             return ApiFormatter::createApi(200, 'Success', $data);
-    //         } else {
-    //             return ApiFormatter::createApi(400, 'Failed');
-    //         }
-    //     } catch (Exception $error) {
-    //         return ApiFormatter::createApi(400, 'Failed');
-    //     }
-    // }
-
 }

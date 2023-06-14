@@ -18,6 +18,7 @@ class OrderController extends Controller
         try {
             $request->validate([
                 'id_customer' => 'required',
+                'kode_barang' => 'required',
                 'nama_barang' => 'required',
                 'alamat_penerima' => 'required',
                 'order_date' => 'required',
@@ -29,6 +30,7 @@ class OrderController extends Controller
             $order = Order::create([
                 'id_order' => $request->id_order,
                 'id_customer' => $request->id_customer,
+                'kode_barang' => $request->kode_barang,
                 'nama_barang' => $request->nama_barang,
                 'alamat_penerima' => $request->alamat_penerima,
                 'order_date' => $request->order_date,
@@ -139,16 +141,18 @@ class OrderController extends Controller
                     ]);
                     }
                     else {
-                        $savedData = Track::select('no_resi',
-                        'id_order',
-                        'estimasi_waktu',
-                        'status',
-                        'lokasi',
-                        'konfirmasi_pengiriman')->get();
+                        $existingData->update([
+                            'id_order' => $existingData->id_order, 
+                            'no_resi' => $item->no_resi,
+                            'estimasi_waktu' => $item->estimasi_waktu,
+                            'status' => $item->status,
+                            'lokasi' => $item->lokasi,
+                            'konfirmasi_pengiriman' => $item->konfirmasi_pengiriman,
+                        ]);
                         return response()->json([
                             'code' => 200,
                             'message' => 'Success',
-                            'data' => $savedData
+                            'data' => $existingData
                         ]);
                     }
                 } 

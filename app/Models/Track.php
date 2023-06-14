@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Track extends Model
 {
     use HasFactory;
+    
+    protected $primaryKey = 'id_lacak';
     protected $fillable = [
         'no_resi',
         'id_order',
